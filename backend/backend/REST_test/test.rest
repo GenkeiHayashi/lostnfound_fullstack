@@ -1,0 +1,2 @@
+### Step 5: GET All Approved Items
+GET http://localhost:3000/api/items
