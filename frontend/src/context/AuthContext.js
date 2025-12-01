@@ -1,12 +1,15 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-//import axios from 'axios'; // Used for making API calls to your backend, keep comment until set up backend 
+import axios from 'axios'; // Used for making API calls to your backend
 
 // 1. Create the Context object
 const AuthContext = createContext(null);
 
 // Placeholder for your backend authentication URL
-//const API_URL = 'http://192.168.56.1:3000/api/auth'; 
-//const LOGIN_API_URL = 'http://localhost:3000/api/auth/login';
+// Update API_URL to use HTTPS and the correct path for login.
+// Replace 'yourdomain.com' with your actual domain name once deployed. 
+// For local development, use http://localhost:3000
+const API_URL = 'https://http://localhost:3000/api/auth'; 
+const LOGIN_API_URL = `${API_URL}/login`; // Will be the POST endpoint
 
 export const AuthProvider = ({ children }) => {
   // State variables for tracking authentication status
@@ -22,65 +25,66 @@ export const AuthProvider = ({ children }) => {
     const storedRole = localStorage.getItem('userRole');
 
     if (token && storedRole) {
-      // In a real application,make a backend call here to verify the token
-      /*
-      // --- BACKEND REPLACEMENT ZONE 1 (Token Verification) ---
+      
+      // --- Token Verification ---
+      // We use a simple GET request to verify the stored token is still valid
       axios.get(`${API_URL}/verify-token`, { headers: { Authorization: `Bearer ${token}` }})
         .then(response => {
-          setUser(response.data.user); // Get full user data
+          // If the token is valid, the backend should return user data including the role
+          setUser(response.data.user); 
           setRole(response.data.user.role);
           setIsAuthenticated(true);
         })
         .catch(() => {
-          logout(); // Token failed verification
+          logout(); // Token failed verification or expired
         })
         .finally(() => setIsLoading(false));
-      // --- END BACKEND REPLACEMENT ZONE 1 ---
-      */
-
+      
+      /* // CHANGE 3: DELETE/COMMENT OUT the testing simulation logic
       // *** TESTING SIMULATION LOGIC: KEEP FOR NOW ***
       setUser({ name: 'Reloaded User', role: storedRole });
       setRole(storedRole);
       setIsAuthenticated(true);
+      // *** END TESTING SIMULATION LOGIC ***
+      */
+    } else {
+        // Only call this if no token was found
+        setIsLoading(false); 
     }
-    setIsLoading(false); // Finished initial check
   }, []);
 
   // --- Login Function ---
   const login = async (email, password) => {
     setIsLoading(true);
-
-    // --- BACKEND REPLACEMENT ZONE 2 (Login Request) ---
-    /*
+    
+    // --- Login Request ---
     try {
-      //send email & password to backend 
-      //Make the actual request to your backend login route 
-      const response = await axios.post(`${API_URL}/login`, { email, password });
+      // Make the actual request to your backend login route (now using POST)
+      const response = await axios.post(LOGIN_API_URL, { email, password });
       
       // Expect token, user object, and role from the backend
       const { token, user } = response.data;
       
       // CRUCIAL: Store the token and the role
       localStorage.setItem('authToken', token);
-      localStorage.setItem('userRole', user.role); // Store the actual role
+      localStorage.setItem('userRole', user.role); // Store the actual role ('user' or 'admin')
       
       setUser(user);
       setRole(user.role);
       setIsAuthenticated(true);
       setIsLoading(false);
-      return true;
+      return true; // Success
 
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 'Network error or server down.';
-      return errorMessage; // Return the error message string
+      // Catch network or server-side errors and extract the error message
+      const errorMessage = error.response?.data?.message || 'Login failed. Network error or server down.';
+      return errorMessage; 
     } finally {
       setIsLoading(false);
     }
-  }; */
-   
-    // --- END BACKEND REPLACEMENT ZONE 2 --
+  };
 
-    // *** TESTING SIMULATION LOGIC: KEEP FOR NOW ***
+    /* // *** TESTING SIMULATION LOGIC: KEEP FOR NOW ***
     await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
     
     const simulatedRole = email.toLowerCase().includes('admin') ? 'admin' : 'user';
@@ -95,7 +99,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(false);
     return true; 
     // *** END TESTING SIMULATION LOGIC ***
-  };
+  };*/
 
   // --- Logout Function ---
   const logout = () => {

@@ -438,7 +438,7 @@ app.post('/api/admin/set-role', verifyToken, async (req, res) => {
 });
 
 // Route 3c: Login User (Issues a session token with role claims)
-app.get('/api/auth/login', async (req, res) => {
+app.post('/api/auth/login', async (req, res) => {
     const { email, password } = req.body;
     
     if (!email || !password) {
@@ -496,6 +496,21 @@ app.get('/api/auth/login', async (req, res) => {
         }
         res.status(401).json({ message: message });
     }
+});
+
+// Route to verify if the token stored on the frontend is still valid
+app.get('/api/auth/verify-token', verifyToken, async (req, res) => {
+    // If verifyToken middleware succeeds, we know req.user is valid
+    res.status(200).json({ 
+        success: true, 
+        message: "Token is valid.",
+        // IMPORTANT: Return user data including the role for context
+        user: {
+            uid: req.user.uid,
+            email: req.user.email,
+            role: req.user.role || 'user' // Assuming role is set as a custom claim
+        }
+    });
 });
 
 // 4. MATCHING ROUTE (GET /api/items/:itemId/matches)
