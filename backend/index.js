@@ -8,6 +8,7 @@ import { Storage } from '@google-cloud/storage'; // Google Cloud Storage SDK
 import multer from 'multer'; // Middleware for handling file uploads
 import { GoogleAuth } from 'google-auth-library'; // Google Auth Library
 import axios from 'axios'; //HTTP Client
+import nodemailer from 'nodemailer'; // Nodemailer for email sending
 
 // Load environment variables immediately
 dotenv.config();
@@ -111,6 +112,18 @@ const authClient = new GoogleAuth({
     keyFile: absolutePath, // <--- 1. Tells it WHICH file to use
     scopes: ['https://www.googleapis.com/auth/cloud-platform'], // <--- 2. Tells it WHAT permissions to ask for
 });
+
+// --- NODEMAILER SETUP ---
+// NOTE: Replace YOUR_EMAIL and YOUR_APP_PASSWORD with actual credentials.
+// For security, get an App Password from your email provider (like Gmail).
+const transporter = nodemailer.createTransport({
+    service: 'gmail', // Use your email provider's service name
+    auth: {
+        user: process.env.EMAIL_USER, // Store in your .env file (Gmail Address)
+        pass: process.env.EMAIL_PASS  // Store in your .env file (App Password)
+    }
+});
+console.log("✅ SUCCESS: Nodemailer transporter initialized.");
 
 // --- STORAGE UTILITY FUNCTION ---
 
@@ -230,6 +243,97 @@ const cosineSimilarity = (vecA, vecB) => {
     return dotProduct / (magnitudeA * magnitudeB);
 };
 
+// --- MATCHING UTILITY FUNCTION ---
+
+/**
+ * Executes the vector-based matching logic using the provided embedding.
+ * @param {number[]} queryVector - The text embedding of the item.
+ * @param {string} targetStatus - The status of items to match against ('lost' or 'found').
+ * @returns {object[]} Array of found item matches that exceed the similarity threshold.
+ */
+const getPotentialMatches = async (queryVector, targetStatus) => {
+    const SIMILARITY_THRESHOLD = 0.8; // Use the same threshold as Route 4
+    const MAX_MATCHES = 5;
+
+    // 1. Fetch all eligible target items (opposite status, approved, unresolved)
+    const targetSnapshot = await db.collection('items')
+        .where('status', '==', targetStatus)
+        .where('isApproved', '==', true)
+        .where('isResolved', '==', false)
+        .get();
+    
+    // 2. Calculate Similarity for each target item
+    const matches = [];
+
+    targetSnapshot.docs.forEach(targetDoc => {
+        const targetItem = targetDoc.data();
+        const targetVector = targetItem.textEmbedding;
+
+        if (!targetVector || targetVector.length === 0) {
+            return; 
+        }
+        
+        const score = cosineSimilarity(queryVector, targetVector);
+
+        if (score >= SIMILARITY_THRESHOLD) {
+            matches.push({
+                id: targetDoc.id,
+                score: parseFloat(score.toFixed(4)), 
+                ...targetItem
+            });
+        }
+    });
+    
+    // 3. Sort by score and limit results
+    matches.sort((a, b) => b.score - a.score);
+    return matches.slice(0, MAX_MATCHES);
+};
+
+// --- EMAIL UTILITY FUNCTION ---
+
+/**
+ * Sends a match notification email to the poster of the lost item.
+ * @param {string} recipientEmail - Email of the user who posted the lost item.
+ * @param {object} lostItem - The user's lost item data.
+ * @param {object[]} matches - Array of found item matches.
+ */
+const sendMatchNotification = async (recipientEmail, lostItem, matches) => {
+    if (matches.length === 0) return;
+
+    // Construct the email body with details about the lost item and matches
+    const matchesList = matches.map(match => `
+        <li>
+            <strong>Found Item: ${match.name}</strong> (Score: ${match.score * 100}%)<br>
+            Description: ${match.description}<br>
+            Location Found: ${match.lastSeenLocation || 'N/A'}<br>
+            </li>
+    `).join('');
+
+    const mailOptions = {
+        from: `"${lostItem.name} Match Alert" <${process.env.EMAIL_USER}>`,
+        to: recipientEmail,
+        subject: `[LostHub] Possible Match Found for: ${lostItem.name}`,
+        html: `
+            <p>Hello,</p>
+            <p>Good news! We found ${matches.length} possible matches for your lost item, 
+            <strong>"${lostItem.description}"</strong>, reported on ${new Date().toLocaleDateString()}.</p>
+            
+            <h3>Possible Found Items:</h3>
+            <ul>${matchesList}</ul>
+
+            <p>Please log in to your account and contact an admin to verify and claim your item.</p>
+            <p>Thank you,<br>LostHub Team</p>
+        `
+    };
+
+    try {
+        const info = await transporter.sendMail(mailOptions);
+        console.log(`✅ SUCCESS: Match email sent to ${recipientEmail}. Message ID: ${info.messageId}`);
+    } catch (error) {
+        console.error(`❌ ERROR sending match email to ${recipientEmail}:`, error.message);
+    }
+};
+
 // --- CORE ITEM LOGIC ---
 
 /**
@@ -284,6 +388,20 @@ const createItemPost = async (req, res, frontendData, file) => {
         };
         delete itemDocument.imageTempRef; 
         
+        if (frontendData.status === 'lost' && textVector && textVector.length > 0) {
+            const userEmail = req.user.email; 
+    
+            // 1. Run the match finding logic
+            const potentialMatches = await getPotentialMatches(textVector, 'found'); 
+    
+            // 2. If matches found, send the notification
+            if (potentialMatches.length > 0) {
+            // You'll need to fetch the user's email from the 'users' collection 
+            // using req.user.uid if you want a reliable, verified email address.
+            await sendMatchNotification(userEmail, itemDocument, potentialMatches);
+            }
+        }
+
         const docRef = await db.collection('items').add(itemDocument);
 
         return res.status(201).json({
@@ -510,8 +628,6 @@ app.get('/api/auth/verify-token', verifyToken, async (req, res) => {
 // 4. MATCHING ROUTE (GET /api/items/:itemId/matches)
 app.get('/api/items/:itemId/matches', verifyToken, async (req, res) => {
     const { itemId } = req.params;
-    const SIMILARITY_THRESHOLD = 0.8; // ADJUST: Confidence level (0.0 to 1.0)
-    const MAX_MATCHES = 5;
 
     try {
         // 1. Get the Query Item and its embedding (The item the user is looking at)
@@ -520,7 +636,7 @@ app.get('/api/items/:itemId/matches', verifyToken, async (req, res) => {
             return res.status(404).json({ success: false, message: 'Item not found.' });
         }
         const queryItem = queryDoc.data();
-        const queryVector = queryItem.textEmbedding;
+        const queryVector = queryItem.textEmbedding; // This is the vector we need for matching
 
         // Ensure the query item has a valid vector
         if (!queryVector || queryVector.length === 0) {
@@ -531,53 +647,19 @@ app.get('/api/items/:itemId/matches', verifyToken, async (req, res) => {
             });
         }
         
-        // Determine the opposite status to match against (Lost matches Found, and vice-versa)
+        // Determine the opposite status (Needed for the final response metadata)
         const targetStatus = queryItem.status === 'lost' ? 'found' : 'lost';
 
-        // 2. Fetch all eligible target items (opposite status, approved, unresolved)
-        const targetSnapshot = await db.collection('items')
-            .where('status', '==', targetStatus)
-            .where('isApproved', '==', true)
-            .where('isResolved', '==', false)
-            .get();
-        
-        // 3. Calculate Similarity for each target item
-        const matches = [];
+        // 2. 🔑 Call the new reusable utility function!
+        // It does the fetching, calculating, sorting, and limiting internally.
+        const topMatches = await getPotentialMatches(queryVector, targetStatus); 
 
-        targetSnapshot.docs.forEach(targetDoc => {
-            const targetItem = targetDoc.data();
-            const targetVector = targetItem.textEmbedding;
-
-            // Skip if target doesn't have a vector
-            if (!targetVector || targetVector.length === 0 || targetDoc.id === itemId) {
-                return; 
-            }
-            
-            // Calculate similarity score using the utility function
-            const score = cosineSimilarity(queryVector, targetVector);
-
-            //TO EMIT DURING FINAL PRODUCTION****************
-            console.log(`DEBUG SCORE: Item ID ${targetDoc.id} vs Query ID ${itemId} Score: ${score}`);
-
-            if (score >= SIMILARITY_THRESHOLD) {
-                matches.push({
-                    id: targetDoc.id,
-                    score: parseFloat(score.toFixed(4)), // Keep 4 decimal places
-                    ...targetItem
-                });
-            }
-        });
-        
-        // 4. Sort by score (highest similarity first) and limit results
-        matches.sort((a, b) => b.score - a.score);
-        const topMatches = matches.slice(0, MAX_MATCHES);
-
-        // 5. Send the final JSON response
+        // 3. Send the final JSON response
         res.status(200).json({ 
             success: true,
             queryId: itemId,
             targetStatus: targetStatus,
-            matches: topMatches 
+            matches: topMatches // Returns the structured match array
         });
 
     } catch (error) {
