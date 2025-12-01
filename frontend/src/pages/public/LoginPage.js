@@ -31,7 +31,7 @@ const LoginPage = () => {
         
         if (result === true) {
             // Success! ProtectedRoute handles redirect to /admin or /posts
-            navigate('/dashboard', { replace: true }); 
+            navigate('/posts', { replace: true }); 
         } else {
             // FAILURE: result contains the error message string
             setError(result);

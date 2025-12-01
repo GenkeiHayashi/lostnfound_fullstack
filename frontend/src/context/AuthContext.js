@@ -8,7 +8,7 @@ const AuthContext = createContext(null);
 // Update API_URL to use HTTPS and the correct path for login.
 // Replace 'yourdomain.com' with your actual domain name once deployed. 
 // For local development, use http://localhost:3000
-const API_URL = 'https://http://localhost:3000/api/auth'; 
+const API_URL = 'http://localhost:3000/api/auth'; 
 const LOGIN_API_URL = `${API_URL}/login`; // Will be the POST endpoint
 
 export const AuthProvider = ({ children }) => {
@@ -21,8 +21,8 @@ export const AuthProvider = ({ children }) => {
   // --- Initial Check (Runs once when the app loads) ---
   useEffect(() => {
     // Check if we have stored credentials (token and role) from a previous session
-    const token = localStorage.getItem('authToken');
-    const storedRole = localStorage.getItem('userRole');
+    const token = sessionStorage.getItem('authToken');
+    const storedRole = sessionStorage.getItem('userRole');
 
     if (token && storedRole) {
       
@@ -66,8 +66,8 @@ export const AuthProvider = ({ children }) => {
       const { token, user } = response.data;
       
       // CRUCIAL: Store the token and the role
-      localStorage.setItem('authToken', token);
-      localStorage.setItem('userRole', user.role); // Store the actual role ('user' or 'admin')
+      sessionStorage.setItem('authToken', token);
+      sessionStorage.setItem('userRole', user.role); // Store the actual role ('user' or 'admin')
       
       setUser(user);
       setRole(user.role);
@@ -104,8 +104,8 @@ export const AuthProvider = ({ children }) => {
   // --- Logout Function ---
   const logout = () => {
     // Clear storage and reset state
-    localStorage.removeItem('authToken'); 
-    localStorage.removeItem('userRole'); 
+    sessionStorage.removeItem('authToken'); 
+    sessionStorage.removeItem('userRole');
     
     setUser(null);
     setRole(null);
@@ -121,12 +121,14 @@ export const AuthProvider = ({ children }) => {
     isLoading,
     login,
     logout,
+    token: sessionStorage.getItem('authToken'), // Retrieves token from session storage
   };
 
   // If the initial check is running, display a loading screen
   if (isLoading) {
     return <h1>AUTH IS LOADING!</h1>; 
   }
+
 
   return (
     <AuthContext.Provider value={contextValue}>

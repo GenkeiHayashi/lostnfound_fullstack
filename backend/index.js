@@ -333,16 +333,10 @@ app.get('/api/items', verifyToken, async (req, res) => {
             // Filter by item type/category
             query = query.where('category', '==', category);
         }
-        
+
         if (status && (status === 'lost' || status === 'found')) {
             // Filter by item status
             query = query.where('status', '==', status);
-        }
-        
-        if (lastSeenLocation) {
-             // Filter by location
-             // NOTE: This performs an exact match on the 'lastSeenLocation' field
-             query = query.where('lastSeenLocation', '==', lastSeenLocation);
         }
         
         // 3. SORTING (Includes date filtering)

@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-import ProtectedRoute from './components/layout/ProtectedRoute';
+//import ProtectedRoute from './context/ProtectedRoute';
+// Note: ProtectedRoute is no longer used, but we keep the import for completeness
+import ProtectedRoute from './components/layout/ProtectedRoute'; 
 
 import LandingPage from './pages/public/LandingPage';
 import LoginPage from './pages/public/LoginPage';
 import SignupPage from './pages/public/SignupPage';
 
-import UserDashboard from './pages/user/UserDashboard';
 import AllPosts from './pages/user/AllPosts';
 import ReportLost from './pages/user/ReportLost';
 import ReportFound from './pages/user/ReportFound';
@@ -18,39 +18,37 @@ import PostingManagement from './pages/admin/PostingManagement';
 function App() {
   return (
     <BrowserRouter>
-      {/* REMOVE <Header /> HERE */}
       
       <Routes>
-        {/* ======================= 1. PUBLIC ROUTES ======================= */}
+        {/* ======================= ALL ROUTES (UNPROTECTED) ======================= */}
+        
+        {/* Public Routes */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/forgot-password" element={<h1>Forgot Password Page Placeholder</h1>} />
         
-        {/* ======================= 2. PROTECTED USER ROUTES ======================= */}
+        {/* ======================= 2. AUTHENTICATED ROUTES (User or Admin) ======================= */}
+        {/* These routes require the user to be logged in (role: 'user' OR 'admin') */}
         <Route element={<ProtectedRoute allowedRoles={['user', 'admin']} />}>
-          
-          {/* Main User Navigation */}
-          {/* UserDashboard can be a simple redirect to /posts if it only says "Welcome" */}
-          <Route path="/dashboard" element={<UserDashboard />} /> 
-          
-          <Route path="/posts" element={<AllPosts />} />
-          <Route path="/report/lost" element={<ReportLost />} />
-          <Route path="/report/found" element={<ReportFound />} />
+        
+        {/* User Routes (Previously Protected) */}
+        <Route path="/posts" element={<AllPosts />} />
+        <Route path="/report/lost" element={<ReportLost />} />
+        <Route path="/report/found" element={<ReportFound />} />
         </Route>
 
-        {/* ======================= 3. PROTECTED ADMIN ROUTES ======================= */}
-        {/* Accessible ONLY to admin user (role: 'admin') */}
+        {/* ======================= 3. ADMIN ONLY ROUTES ======================= */}
+        {/* These routes require the highest level of authorization (role: 'admin') */}
         <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-          
-          {/* Admin Dashboard (Home) */}
-          <Route path="/admin" element={<AdminDashboard />} /> 
 
-          {/* Posting Management Feature */}
-          <Route path="/admin/posts/manage" element={<PostingManagement />} />
+        {/* Admin Routes (Previously Protected) */}
+        <Route path="/admin" element={<AdminDashboard />} /> 
+        <Route path="/admin/posts/manage" element={<PostingManagement />} />
+        
         </Route>
 
-        {/* ======================= 4. FALLBACK ======================= */}
+        {/* ======================= FALLBACK ======================= */}
         <Route path="*" element={<h1>404: Page Not Found</h1>} />
       </Routes>
       
