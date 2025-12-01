@@ -1,0 +1,131 @@
+/* 1. FLEXBOX STICKY FOOTER FIX (Guarantees Footer is at the bottom) */
+/* Requires global height set on html, body, #root */
+.page-wrapper {
+    display: flex;
+    flex-direction: column; /* Stacks Header, Main, Footer vertically */
+    min-height: 100vh;      /* Takes full viewport height */
+}
+
+.main-content {
+    flex-grow: 1;           /* CRUCIAL: Forces main content to consume all remaining space */
+    padding: 20px 0;
+}
+
+/* 2. HEADER STYLES */
+.landing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #5834db;
+    /*border-bottom: 1px solid #dddddd;*/
+}
+
+.landing-logo {
+    color: #ffffff; 
+    text-decoration: none;
+    font-size: 1.8rem;
+    font-weight: 800;
+    font-style: bold;
+}
+
+.header-button {
+    margin-left: 10px;
+    padding: 1px 15px;
+    text-decoration: text;
+    font-weight: 600;
+    font-size: 1.0rem;
+    cursor: pointer;
+}
+
+.header-login-btn {
+    color: white;
+    background-color: transparent;
+}
+
+.header-signup-btn {
+    background-color: #5834db;
+    color: white;
+}
+
+/* 3. CONTENT GRID (MOBILE-FIRST LAYOUT) */
+.landing-grid {
+    /* MOBILE DEFAULT: Stacked vertically */
+    display: flex;
+    flex-direction: column; 
+    padding: 20px;
+    max-width: 1200px;
+    margin: 50px auto 20px auto; 
+}
+
+.hero-section {
+    margin-bottom: 30px; 
+    text-align: center;
+}
+
+.welcome-text {
+    font-size: 2rem;
+    color: #34495e;
+    font-weight: 300;
+    margin: 0;
+}
+
+.website-name {
+    font-size: 4.5rem;
+    color: #5834db;
+    font-weight: 800;
+    margin: 0;
+}
+
+.description-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #34495e;
+}
+
+/* --- DESKTOP OVERRIDE: Switch to two columns --- */
+@media (min-width: 768px) {
+    .landing-grid {
+        flex-direction: row; /* Switch to horizontal layout */
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 40px 20px;
+    }
+    
+    .hero-section {
+        flex-basis: 35%; /* Left section width */
+        text-align: left;
+        margin-bottom: 0;
+    }
+    
+    .description-section {
+        flex-basis: 60%; /* Right section width */
+        padding-left: 40px;
+        border-left: 1px solid #eee;
+    }
+}
+
+/* 4. FOOTER STYLES */
+.landing-footer {
+    background-color: #333;
+    color: #fff;
+    padding: 15px 20px;
+    text-align: center;
+    border-top: 1px solid #222;
+}
+
+.footer-copyright {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+.footer-link {
+    color: #fff; /* White links */
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 0.9rem;
+}
+
+.footer-separator {
+    color: #fff;
+}
