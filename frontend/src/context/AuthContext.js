@@ -126,7 +126,7 @@ export const AuthProvider = ({ children }) => {
 
   // If the initial check is running, display a loading screen
   if (isLoading) {
-    return <h1>AUTH IS LOADING!</h1>; 
+    return <h1>PLEASE WAIT YA :D</h1>; 
   }
 
 

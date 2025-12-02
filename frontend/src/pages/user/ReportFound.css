@@ -1,0 +1,278 @@
+/* BASE LAYOUT (Using styles defined previously) */
+.report-found-page {
+    min-height: 100vh; 
+    background-color: #f4f7f6;
+}
+
+.report-found-main {
+    display: flex;
+    justify-content: center;
+    padding: 30px 20px;
+}
+
+/* The central rectangular border container */
+.report-found-container {
+    width: 100%;
+    max-width: 900px;
+    background-color: #fdfdfd;
+    border: 1px solid #ddd; 
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 5px;
+    border-bottom: 0px solid #000000;
+    padding-bottom: 10px;
+}
+
+.form-title {
+    color: #000000;
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+/* HEADER STYLES (Match AllPosts.css for consistency) */
+/* Requires global CSS setup */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background-color: #5834db;
+    border-bottom: 2px solid #ddd;
+}
+/* Define all other header classes (.header-left, .header-nav, .logout-button, etc.) 
+   using the styles from AllPosts.css here. */
+
+/* FORM LAYOUT (MOBILE-FIRST: STACKED COLUMNS) */
+.report-form {
+    display: flex;
+    flex-direction: column; 
+    gap: 20px;
+}
+
+.form-column {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Input Styles */
+label {
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 3px;
+    color: #000000;
+}
+
+.form-input, .form-select, .form-textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    width: 100%;
+}
+.form-textarea {
+    resize: vertical;
+}
+
+/* IMAGE UPLOAD STYLES */
+.image-upload-box {
+    position: relative;
+    border: 2px dashed #000000;
+    border-radius: 6px;
+    cursor: pointer;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    transition: border-color 0.2s;
+}
+
+.image-upload-box:hover {
+    border-color: #3498db;
+}
+
+.file-input-hidden {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.image-preview {
+    width: 100%;
+    max-height: 500px;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+}
+
+.image-label {
+    color:rgb(0, 0, 0);
+}
+
+.preview-image {
+    /* CRITICAL FIX: Ensure the image itself never exceeds the parent preview container */
+    max-width: 100%;
+    max-height: 100%; 
+    height: 350px;
+    width: auto; /* Allow image to be smaller than the box */
+    object-fit: contain; /* Ensures the whole image is visible without cropping */
+    border-radius: 4px;
+}
+
+.upload-prompt {
+    color: #000000;
+    margin: 0;
+}
+
+/* SUBMISSION BUTTONS (Side-by-Side) */
+.form-submit-row {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 15px;
+    width: 100%;
+    padding-top: 15px;
+}
+
+.submit-button {
+    padding: 12px 30px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    flex-grow: 1; /* Allows buttons to expand on mobile */
+    max-width: 180px; /* Max width on desktop */
+}
+
+.submit {
+    background-color: #5834db; 
+    color: white;
+    border: none;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.cancel {
+    background-color: #616969; 
+    color: white;
+    border: none;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+
+/* DESKTOP OVERRIDE (Two Columns) */
+@media (min-width: 768px) {
+    .report-form {
+        flex-direction: row; 
+        flex-wrap: wrap;
+    }
+
+    .form-column {
+        flex-basis: calc(50% - 10px); 
+    }
+
+    /* Force button row to span full width */
+    .form-submit-row {
+        flex-basis: 100%;
+        justify-content: flex-end; /* Align buttons to the right on desktop */
+    }
+}
+
+
+/* MODAL STYLES (Used for Success and Cancel Prompts) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6); 
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    z-index: 2000; 
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 90%; 
+    max-width: 400px; 
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.modal-content h2 {
+    color: #2c3e50;
+    margin-top: 0;
+}
+
+.modal-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.modal-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.modal-button.yes {
+    background-color: #c01300; /* Red for destructive action (Yes, cancel) */
+    color: white;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.modal-button.no, .modal-button {
+    background-color: #5834db;; /* Blue for OK/No */
+    color: white;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    /* Inherit the font family and size from the main input text */
+    font-family: inherit; 
+    font-size: 1rem;
+    
+    /* Make the color slightly darker than the browser default for tidiness */
+    color: #999; 
+    opacity: 1; /* Override default opacity on some browsers */
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    /* Ensure all inputs use the same base font size/family */
+    font-family: 'Times New Roman', Times, serif; /* Or whichever font you are using globally */
+    font-size: 1rem;
+    color: #333;
+}
+
+.logout-button-link {
+    font-family: 'Times New Roman', Times, serif; 
+    padding: 6px 12px;
+    background-color: #ffffff;
+    color: rgb(99, 27, 244);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+}

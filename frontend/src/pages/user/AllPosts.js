@@ -47,7 +47,6 @@ const StaticHeader = () => {
 
     // 🛑 BACKEND PLACEHOLDER: Replace "TestUser" with the user's actual display name
     const username = user?.displayName || user?.email.split('@')[0] || "User"; 
-    // const username = "TestUser"; // MOCK USERNAME
 
     // 🛑 BACKEND PLACEHOLDER: Replace a href with navigate(to) or use the actual logout function
     const handleLogout = () => {

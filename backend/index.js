@@ -387,21 +387,6 @@ const createItemPost = async (req, res, frontendData, file) => {
             ...serverGeneratedFields
         };
         delete itemDocument.imageTempRef; 
-        
-        if (frontendData.status === 'lost' && textVector && textVector.length > 0) {
-            const userEmail = req.user.email; 
-    
-            // 1. Run the match finding logic
-            const potentialMatches = await getPotentialMatches(textVector, 'found'); 
-    
-            // 2. If matches found, send the notification
-            if (potentialMatches.length > 0) {
-            // You'll need to fetch the user's email from the 'users' collection 
-            // using req.user.uid if you want a reliable, verified email address.
-            await sendMatchNotification(userEmail, itemDocument, potentialMatches);
-            }
-        }
-
         const docRef = await db.collection('items').add(itemDocument);
 
         return res.status(201).json({
@@ -610,7 +595,7 @@ app.post('/api/auth/login', async (req, res) => {
     }
 });
 
-// Route to verify if the token stored on the frontend is still valid
+// Route 3d: Verify Token Validity
 app.get('/api/auth/verify-token', verifyToken, async (req, res) => {
     // If verifyToken middleware succeeds, we know req.user is valid
     res.status(200).json({ 
@@ -623,6 +608,147 @@ app.get('/api/auth/verify-token', verifyToken, async (req, res) => {
             role: req.user.role || 'user' // Assuming role is set as a custom claim
         }
     });
+});
+
+// 3e. Route for Admin to Approve an Item and Trigger Matching (NEW!)
+app.post('/api/admin/approve-item/:itemId', verifyToken, async (req, res) => {
+    const { itemId } = req.params;
+    
+    // 🛑 SECURITY CHECK: Ensure requester is an admin.
+    // NOTE: This check should be based on the 'role' custom claim in req.user
+    if (req.user.role !== 'admin') { 
+        return res.status(403).json({ success: false, message: 'Admin access required for item approval.' }); 
+    }
+
+    try {
+        // 1. Update the item status to APPROVED
+        await db.collection('items').doc(itemId).update({ isApproved: true });
+        
+        // 2. Get the item data and vector
+        const approvedDoc = await db.collection('items').doc(itemId).get();
+        const approvedItem = approvedDoc.data();
+        const queryVector = approvedItem.textEmbedding;
+        let targetStatus, matchItem, notifyUser = false;
+
+        if (approvedItem.status === 'lost') {
+            // SCENARIO 1: Newly Approved item is LOST. Search for FOUND matches.
+            targetStatus = 'found';
+            notifyUser = true; // Notify the current user (lost item poster)
+            matchItem = approvedItem;
+        
+        } else if (approvedItem.status === 'found') {
+            // SCENARIO 2: Newly Approved item is FOUND. Search for LOST matches.
+            targetStatus = 'lost';
+            // We notify the poster of the *matching* lost item, so we need the full match data first.
+        }
+
+        if (queryVector && queryVector.length > 0) {
+            
+            // a. Find matches (Search against approved targets of the opposite status)
+            const potentialMatches = await getPotentialMatches(queryVector, targetStatus); 
+
+            // b. Handle Notifications based on Scenario
+            if (potentialMatches.length > 0) {
+
+                if (approvedItem.status === 'lost') {
+                    // Scenario 1: Notify the user who just posted the LOST item.
+                    const userDoc = await db.collection('users').doc(approvedItem.posterUid).get();
+                    const recipientEmail = userDoc.data()?.email;
+
+                    if (recipientEmail) {
+                        await sendMatchNotification(recipientEmail, approvedItem, potentialMatches);
+                    }
+
+                } else if (approvedItem.status === 'found') {
+                    // Scenario 2: Notify the user(s) who posted the matching LOST item(s).
+                    for (const match of potentialMatches) {
+                        const lostItem = match; // The match is the lost item
+                        
+                        // Need to fetch the lost user's email
+                        const userDoc = await db.collection('users').doc(lostItem.posterUid).get();
+                        const recipientEmail = userDoc.data()?.email;
+
+                        if (recipientEmail) {
+                            // The notification content structure needs adjustment: 
+                            // sendMatchNotification(recipientEmail, lostItem, [approvedItem]);
+                            // We need to tell the lost user about the item that was just found.
+                            
+                            // For simplicity, we reuse the existing function structure, 
+                            // passing the found item as the only match.
+                            await sendMatchNotification(recipientEmail, lostItem, [approvedItem]);
+                        }
+                    }
+                }
+            }
+        }
+
+        res.status(200).json({ 
+            success: true, 
+            message: `Item ${itemId} approved. Match check completed.`,
+            isMatchFound: (potentialMatches?.length > 0)
+        });
+
+    } catch (error) {
+        console.error(`Admin Approval Error for item ${itemId}:`, error.message);
+        res.status(500).json({ success: false, message: 'Failed to approve item and run match check.' });
+    }
+});
+
+// Route 3f: Admin Delete Item
+app.delete('/api/admin/items/:itemId', verifyToken, async (req, res) => {
+    const { itemId } = req.params;
+    
+    // SECURITY CHECK: Ensure requester is an admin.
+    if (req.user.role !== 'admin') { 
+        return res.status(403).json({ success: false, message: 'Admin access required for deletion.' }); 
+    }
+
+    try {
+        // 1. Fetch the item data BEFORE deletion to get the image URL
+        const itemDoc = await db.collection('items').doc(itemId).get();
+        if (!itemDoc.exists) {
+            return res.status(404).json({ success: false, message: 'Item not found.' });
+        }
+        const itemData = itemDoc.data();
+        const imageUrl = itemData.imageUrl; 
+
+        // 2. Delete the item document from Firestore
+        await db.collection('items').doc(itemId).delete();
+        
+        // 3. Delete the associated image from Cloud Storage (Data Hygiene)
+        if (imageUrl) {
+            // Construct the path by removing the base URL
+            const urlParts = imageUrl.split('/');
+            // The file path starts after the bucket name (usually the 5th segment)
+            const filePath = urlParts.slice(4).join('/'); 
+
+            // Delete the file from the bucket
+            await bucket.file(filePath).delete();
+            console.log(`✅ SUCCESS: Deleted image file: ${filePath}`);
+        }
+
+        res.status(200).json({ 
+            success: true, 
+            message: `Item ${itemId} and associated file successfully deleted.` 
+        });
+
+    } catch (error) {
+        // Handle case where file might already be deleted, or other GCS errors.
+        if (error.code === 404) {
+            console.warn(`GCS Warning: File for item ${itemId} not found on deletion.`);
+        } else {
+             console.error(`Admin Deletion Error for item ${itemId}:`, error.message);
+             // Re-throw 500 error if it wasn't a GCS file-not-found warning
+             return res.status(500).json({ success: false, message: 'Failed to delete item or associated file.' });
+        }
+        
+        // If the deletion was successful (despite a warning), send success status
+        res.status(200).json({ 
+            success: true, 
+            message: `Item ${itemId} deleted from Firestore (GCS file check completed).` 
+        });
+
+    }
 });
 
 // 4. MATCHING ROUTE (GET /api/items/:itemId/matches)

@@ -1,0 +1,2 @@
+### Admin Delete Post
+DELETE http://localhost:3000/api/admin/items/54YXlfpXV2Iqw6bbULEh
