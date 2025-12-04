@@ -1,0 +1,114 @@
+/* --- Modal Overlay (Transparent Background) --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Semi-transparent background */
+    background-color: rgba(0, 0, 0, 0.6); 
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align to the top, easier for long content */
+    z-index: 1000; /* Ensure it's above all other content */
+    padding-top: 50px;
+}
+
+/* --- Modal Content Window (The White Box) --- */
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%; /* Mobile width */
+    max-width: 800px; /* Desktop max width */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    position: relative;
+    max-height: 90vh; /* Prevents modal from overflowing screen */
+    overflow-y: auto; /* Allows scrolling inside if content is tall */
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #777;
+}
+
+/* --- Modal Body Grid (Image + Details Side-by-Side) --- */
+.modal-body-grid {
+    display: flex;
+    flex-direction: column; /* Mobile Default: Stack image above details */
+    gap: 20px;
+}
+
+.modal-image-container {
+    text-align: center;
+}
+
+.modal-item-image {
+    width: 100%; /* Full width on mobile */
+    max-height: 300px;
+    object-fit: contain; /* Ensures the whole image is visible */
+    border-radius: 8px;
+}
+
+.image-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #999;
+    margin-top: 5px;
+}
+
+.modal-details-list p {
+    margin-bottom: 8px;
+    line-height: 1.4;
+    font-size: 1rem;
+}
+
+/* --- DESKTOP OVERRIDE: Side-by-Side Layout --- */
+@media (min-width: 600px) {
+    .modal-body-grid {
+        flex-direction: row; /* Side-by-side on wider screens */
+        align-items: flex-start;
+    }
+    
+    .modal-image-container {
+        flex-basis: 40%;
+        text-align: left;
+    }
+
+    .modal-item-image {
+        max-width: 100%;
+        max-height: 400px;
+    }
+
+    .modal-details-list {
+        flex-basis: 60%;
+        padding-left: 20px;
+    }
+}
+
+/* --- Footer (Back Button) --- */
+.modal-footer {
+    text-align: right;
+    margin-top: 30px;
+}
+
+.back-button {
+    padding: 10px 25px;
+    background-color: #f3f4f6;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}

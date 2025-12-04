@@ -1,0 +1,195 @@
+/* 1. MODAL OVERLAY (Transparent Background) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Semi-transparent dark background */
+    background-color: rgba(0, 0, 0, 0.7); 
+    display: flex;
+    justify-content: center;
+    /* Aligns content slightly higher than center */
+    align-items: flex-start; 
+    padding-top: 40px;
+    z-index: 1500; /* Must be higher than general app content */
+}
+
+/* 2. MAIN MODAL CONTAINER */
+.modal-content.modal-main {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 90%; 
+    max-width: 850px; 
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    position: relative;
+    max-height: 90vh; /* Prevents overflow */
+    overflow-y: auto; 
+    /* Ensures all text uses Times New Roman globally via index.css */
+}
+
+.modal-header h2 {
+    color: #2c3e50;
+    margin: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* 3. BODY LAYOUT (Mobile-First Stacking) */
+.modal-body-grid {
+    display: flex;
+    flex-direction: column; /* MOBILE DEFAULT: Stacked */
+    gap: 25px;
+    padding: 20px 0;
+}
+
+/* --- Image Container --- */
+.modal-image-container {
+    text-align: center;
+}
+
+.modal-item-image {
+    width: 100%;
+    max-height: 250px; /* Constrain vertical size */
+    object-fit: contain; /* Shows entire image */
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    cursor: zoom-in; /* Indicates the image is clickable */
+}
+
+.image-label {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.8rem;
+    color: #777;
+}
+
+/* --- Details List --- */
+.modal-details-list p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+    font-size: 1rem;
+}
+.modal-details-list strong {
+    color: #2c3e50;
+}
+
+/* --- DESKTOP OVERRIDE: Side-by-Side --- */
+@media (min-width: 768px) {
+    .modal-body-grid {
+        flex-direction: row; 
+        align-items: flex-start;
+    }
+    
+    .modal-image-container {
+        flex-basis: 40%;
+        max-width: 300px;
+    }
+
+    .modal-details-list {
+        flex-basis: 60%;
+        padding-left: 30px;
+        border-left: 1px solid #f0f0f0;
+    }
+}
+
+/* 4. ACTION BUTTONS & FOOTER */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.action-buttons-group {
+    display: flex;
+    gap: 15px;
+}
+
+.btn {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    min-width: 100px;
+}
+
+.btn-approve {
+    background-color: #2ecc71; /* Green */
+    color: white;
+}
+
+.btn-reject, .btn-delete {
+    background-color: #e74c3c; /* Red */
+    color: white;
+}
+
+.btn-back {
+    background-color: #95a5a6; /* Gray */
+    color: white;
+}
+
+/* 5. CONFIRMATION/SUCCESS MODALS */
+.modal-confirm {
+    /* Overlay for the second modal layer */
+    background-color: rgba(0, 0, 0, 0.85); 
+    padding-top: 20vh;
+}
+
+.modal-confirm-content, .modal-success-content {
+    max-width: 350px;
+    padding: 25px;
+}
+
+.modal-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-confirm-approve, .btn-confirm-ok {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.btn-confirm-reject, .btn-confirm-delete {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-cancel {
+    background-color: #ccc;
+    color: #333;
+}
+
+/* 6. FULL-SCREEN IMAGE VIEWER */
+.modal-full-image {
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 2000;
+}
+
+.full-image-viewer {
+    max-width: 90%;
+    max-height: 90vh;
+    object-fit: contain;
+    border: 2px solid white;
+}
+
+.full-image-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: 2px solid white;
+    color: white;
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}

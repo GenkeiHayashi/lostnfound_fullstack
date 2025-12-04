@@ -1,0 +1,109 @@
+/* MOBILE-FIRST DEFAULTS (Styles for screens < 600px) */
+
+.signup-page-wrapper {
+    /* Ensures form is centered vertically and horizontally */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Aligned to start to avoid stretching on short screens */
+    min-height: 90vh; /* Takes most of the viewport height */
+    padding: 30px;
+    background-color: #5834db; /* Light background for the page */
+}
+
+.signup-form-container {
+    /* The rectangular window style */
+    width: 100%; /* Full width on mobile */
+    max-width: 400px; /* Constrained on wider screens */
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+}
+
+.signup-header {
+    text-align: center;
+    color: #34495e;
+    margin-bottom: 25px;
+    font-size: 1.8rem; /* Large and clear on mobile */
+}
+
+/* Input Styles */
+.signup-label {
+    display: block;
+    /*font-weight: 600;*/
+    margin-top: 15px; /* Adds space after the previous element */
+    /*margin-bottom: 5px;
+    color: #555;
+    font-size: 0.9rem; */
+}
+
+.signup-input {
+    width: 100%;
+    padding: 12px; /* Large padding for easy tapping on mobile */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box; /* Crucial for padding not breaking the width */
+    font-size: 1rem;
+    margin-bottom: 15px; /* Adds space after the input box */
+}
+
+/* Show Password Toggle */
+.password-toggle {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+}
+.password-toggle input {
+    margin-right: 8px;
+}
+.signup-error {
+    color: #e74c3c;
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+/* Signup Button */
+.signup-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #5834db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+.signup-button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+.login-link a {
+    color: #5834db;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.signup-logo-image {
+    max-width: 150px; 
+    height: auto; 
+    display: block;
+}
+
+
+/* CUSTOM LOGO ICON STYLES */
+.logohub-icon {
+    /* Represents the centered space for the icon */
+    display: flex;
+    justify-content: center;
+    margin-bottom: auto;
+}

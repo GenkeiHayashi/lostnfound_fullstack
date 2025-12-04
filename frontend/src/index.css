@@ -1,0 +1,21 @@
+/* 1. Essential reset for height calculation */
+html, body, #root {
+    height: 100%; /* Ensure the ancestors of your React app take full height */
+    margin: 0;
+    padding: 0;
+}
+
+/* 2. Optional: Standard box sizing */
+* {
+    box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}

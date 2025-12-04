@@ -1,0 +1,30 @@
+### Step 2: POST Lost Item with File (Corrected Field Name)
+POST http://localhost:3000/api/items
+Content-Type: multipart/form-data; boundary=Rest_Client_Boundary
+
+--Rest_Client_Boundary
+Content-Disposition: form-data; name="name"
+
+Matric Card
+--Rest_Client_Boundary
+Content-Disposition: form-data; name="description"
+
+Found a blue colour matric card, malaysian man got matric number a23ke0522.
+--Rest_Client_Boundary
+Content-Disposition: form-data; name="category"
+
+Personal Items
+--Rest_Client_Boundary
+Content-Disposition: form-data; name="status"
+
+found
+--Rest_Client_Boundary
+Content-Disposition: form-data; name="lastSeenLocation"
+
+P16 FKE
+--Rest_Client_Boundary
+Content-Disposition: form-data; name="itemImage"; filename="test_image.jpg"
+Content-Type: image/jpeg
+
+< C:\Users\User\Downloads\test_image.jpg
+--Rest_Client_Boundary--
