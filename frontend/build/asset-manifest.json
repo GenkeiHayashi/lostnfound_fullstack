@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/static/css/main.e360fe8c.css",
+    "main.js": "/static/js/main.344393ac.js",
+    "static/media/LostHub_Logo.png": "/static/media/LostHub_Logo.3fdb1df61f60374aae93.png",
+    "static/media/user.png": "/static/media/user.591e3e80467f5c10f421.png",
+    "static/media/personup.png": "/static/media/personup.1e317ccda526389a9177.png",
+    "static/media/person.png": "/static/media/person.961568814dceb733c85a.png",
+    "static/media/persondown.png": "/static/media/persondown.8927c273fe0729d5a6c9.png",
+    "index.html": "/index.html",
+    "main.e360fe8c.css.map": "/static/css/main.e360fe8c.css.map",
+    "main.344393ac.js.map": "/static/js/main.344393ac.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e360fe8c.css",
+    "static/js/main.344393ac.js"
+  ]
+}
