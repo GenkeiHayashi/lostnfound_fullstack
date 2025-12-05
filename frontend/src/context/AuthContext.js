@@ -8,7 +8,7 @@ const AuthContext = createContext(null);
 // Update API_URL to use HTTPS and the correct path for login.
 // Replace 'yourdomain.com' with your actual domain name once deployed. 
 // For local development, use http://localhost:3000
-const API_URL = 'http://localhost:3000/api/auth'; 
+const API_URL = 'https://losthub-backend-git-vercel-deploy-genkeihayashis-projects.vercel.app/api/auth'; 
 const LOGIN_API_URL = `${API_URL}/login`; // Will be the POST endpoint
 
 export const AuthProvider = ({ children }) => {
