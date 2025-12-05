@@ -2,9 +2,54 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios'; 
 import { Link, useNavigate } from 'react-router-dom'; 
 import { useAuth } from '../../context/AuthContext';
-import AdminHeader from '../../components/layout/AdminHeader';
-import AdminItemModal from '../../components/items/AdminItemModal'; // New Modal Component
 import './AdminDashboard.css';
+import AdminItemModal from '../../components/items/AdminItemModal'; // New Modal Component
+
+const DashboardHeader = () => {
+    // 🛑 BACKEND PLACEHOLDER: Uncomment the context hook
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const username = user?.displayName || user?.email.split('@')[0] || "Admin";  
+
+    const handleLogout = () => {
+        logout(); 
+        navigate('/login', { replace: true }); 
+    };
+
+    return (
+        <header className="admin-header">
+            {/* Left Section: Logo and Navigation Links */}
+            <div className="header-left">
+                
+                {/* Logo/Home Link (Routes to Admin Dashboard home) */}
+                <Link to="/admin" className="admin-logo-link">
+                    LostHub
+                </Link>
+                
+                {/* Admin Navigation Link */}
+                <nav className="header-nav">
+                    <Link to="/admin/usermanage" className="nav-link">
+                        User Management
+                    </Link>
+                </nav>
+            </div>
+
+            {/* Right Section: Welcome Message and Logout Button */}
+            <div className="header-right">
+                <span className="welcome-message">
+                    Welcome , <strong>{username}</strong>
+                </span>
+                <button 
+                    onClick={handleLogout} 
+                    className="logout-button"
+                >
+                    Log Out
+                </button>
+            </div>
+        </header>
+    );
+};
 
 // --- UTILITIES & MOCK DATA (Same as AllPosts) ---
 const CATEGORIES = ['Electronics', 'Stationery', 'Books', 'Clothing', 'Personal Items', 'Others'];
@@ -38,7 +83,6 @@ const formatTimestamp = (timestamp) => {
         day: 'numeric' 
     });
 };
-
 
 const AdminDashboard = () => {
     // State for filtering
@@ -97,7 +141,7 @@ const AdminDashboard = () => {
     // 🛑 ACTION HANDLERS (Approve/Reject/Delete) - INTEGRATED WITH BACKEND
     const handleAction = async (itemId, actionType) => {
         if (!token) {
-            alert("Error: Not authenticated. Cannot perform action.");
+            console.error("Error: Not authenticated. Cannot perform action.");
             return;
         }
 
@@ -129,20 +173,17 @@ const AdminDashboard = () => {
 
             // After successful action, close modal, and refresh data
             setSelectedItem(null); 
-            alert(successMessage);
-            //setSuccessActionType(actionType === 'approve' ? 'approve' : 'delete');
-            //setShowSuccessModal(true);
-            // Force refresh of the items list after a short delay
+            console.log(successMessage);
             setRefreshTrigger(prev => prev + 1);          
         } catch (error) {
             console.error(`Action ${actionType} failed:`, error.response?.data || error.message);
-            alert(`Action failed: ${error.response?.data?.message || 'Server error.'}`);
+            console.error(`Action failed: ${error.response?.data?.message || 'Server error.'}`);
         }
     };
 
     return (
         <div className="admin-dashboard-page">
-            <AdminHeader /> 
+            <DashboardHeader /> 
             
             <main className="admin-main-content">
                 
@@ -188,7 +229,7 @@ const AdminDashboard = () => {
 
                 {/* Item Grid */}
                 {isLoading ? (
-                    <div className="loading-state">Loading Admin Items...</div>
+                    <div className="loading-state">Loading Items...</div>
                 ) : (
                     <div className="item-grid-container">
                         {items.length > 0 ? (

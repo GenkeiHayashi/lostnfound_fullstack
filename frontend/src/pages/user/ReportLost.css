@@ -1,7 +1,7 @@
 /* BASE LAYOUT (Using styles defined previously) */
 .report-lost-page {
     min-height: 100vh; 
-    background-color: #f4f7f6;
+    background-color: #ffffff;
 }
 
 .report-lost-main {
@@ -14,7 +14,7 @@
 .report-lost-container {
     width: 100%;
     max-width: 900px;
-    background-color: #fff;
+    background-color: #ffffff;
     border: 1px solid #ddd; 
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -40,12 +40,25 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 25px;
+    padding: 13px 25px;
     background-color: #5834db;
     border-bottom: 2px solid #ddd;
 }
-/* Define all other header classes (.header-left, .header-nav, .logout-button, etc.) 
-   using the styles from AllPosts.css here. */
+
+.person-badge {
+    display: flex;
+    align-items: center;
+
+}
+
+.person-icon {
+    width: 20px; 
+    height: 20px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+}
 
 /* FORM LAYOUT (MOBILE-FIRST: STACKED COLUMNS) */
 .report-form {
@@ -269,6 +282,10 @@ label {
     cursor: pointer;
     font-size: 0.9rem;
     text-decoration: none;
-    font-weight: bold;
-    display: inline-block;
+    display: flex;
 }
+
+.logout-button-link:hover {
+    background-color: #f0f0f0;
+}
+

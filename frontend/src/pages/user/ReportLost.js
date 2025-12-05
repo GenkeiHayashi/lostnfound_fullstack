@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { LogOut } from 'lucide-react';
 import axios from 'axios'; 
+import PersonIcon from '../../assets/person.png'; 
 import { useAuth } from '../../context/AuthContext'; 
 import './ReportLost.css'; 
 
@@ -34,23 +36,21 @@ const StandaloneHeader = () => {
             </div>
 
             <div className="header-right">
-                {/* Person Icon Placeholder (using inline style for simplicity) */}
-                <div className="person-icon-placeholder" 
-                     style={{width: '30px', height: '30px', borderRadius: '50%', backgroundColor: '#eee', border: '1px solid #ccc'}}>
-                </div>
-
-                <span className="welcome-message">
+                <div className="person-badge">  
+                     <img src={PersonIcon} alt="Person Icon" className="person-icon" /> 
+                    <span className="welcome-message">
                      <strong>{username}</strong>
-                </span>
+                    </span>
+                </div>
                 
                 {/* Logout button is visible only if authenticated */}
                 {/* {isAuthenticated ? ( */}
+                <div className="header-buttons-container">
                     <button onClick={handleLogout} className="logout-button-link">
-                        Logout
-                    </button>
-                {/* ) : (
-                    <Link to="/login" className="logout-button-link">Login</Link>
-                )*/}     
+                        <LogOut size={18} className="icon-left" />
+                        Log Out
+                    </button> 
+                </div>   
             </div>
         </header>
     );
@@ -209,13 +209,14 @@ const ReportLost = () => {
                             </select>
 
                             {/* 3. Last Seen Location */}
-                            <label htmlFor="lastSeenLocation">Last Seen Location</label>
+                            <label htmlFor="lastSeenLocation">Last Seen Location*</label>
                             <input
                                 type="text"
                                 id="lastSeenLocation"
                                 name="lastSeenLocation"
                                 value={formData.lastSeenLocation}
                                 onChange={handleChange}
+                                required
                                 placeholder="Eg: Arked Lestari C2 Mart, FKE Undergraduate Office"
                                 disabled={isLoading}
                                 className="form-input"
@@ -258,7 +259,7 @@ const ReportLost = () => {
                                         />
                                     ) : (
                                         <p className="upload-prompt">
-                                            Click here to upload photo
+                                            Click here to upload photo or similar item photo
                                         </p>
                                     )}
                                 </div>

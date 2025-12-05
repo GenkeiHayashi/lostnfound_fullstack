@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom'; 
 import ItemDetailsModal from '../../components/items/ItemDetailsModal';
+import { LogOut } from 'lucide-react'; // Icons for Logout
 import './AllPosts.css'; // For layout and styling
-// Import axios for API calls
-import axios from 'axios'; 
-// Import useAuth to get token and displayName
-import { useAuth } from '../../context/AuthContext';
+import axios from 'axios'; // Import axios for API calls
+import { useAuth } from '../../context/AuthContext'; // Import useAuth to get token and displayName
 
 // Utility function to format timestamp from Firestore
 const formatTimestamp = (timestamp) => {
@@ -72,8 +71,10 @@ const StaticHeader = () => {
             <span className="welcome-message">
                 Welcome, <strong>{username}</strong> {/* Uses actual username */}
             </span>
-            <a href="#" onClick={handleLogout} className="logout-button-link"> {/* Use onClick and remove hardcoded href */}
-                Logout
+                
+            <a href="#" onClick={handleLogout} className="logout-button-link"> 
+                <LogOut size={18}/>
+                <span>Log Out</span>
             </a>
         </div>
     </header>
@@ -175,7 +176,7 @@ const AllPosts = () => {
 
                 {/* Item Grid */}
                 {isLoading ? (
-                    <div className="loading-state">Loading items from Firebase...</div>
+                    <div className="loading-state">Loading Items...</div>
                 ) : (
                     <div className="item-grid-container">
                         {items.length > 0 ? (

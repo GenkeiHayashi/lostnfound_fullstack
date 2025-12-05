@@ -1,8 +1,118 @@
+/* Header */
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #5834db; 
+    color: white;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Reduced gap */
+    min-width: 0; /* Allows this container to shrink */
+}
+
+.admin-logo-link {
+    color: white; 
+    text-decoration: none;
+    font-size: 1.8rem;
+    font-weight: bold;
+    flex-shrink: 0; /* Keep logo size fixed */
+}
+
+.header-nav {
+    /* FIX 2: Force navigation links to shrink */
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap; 
+    min-width: 0;
+}
+
+.header-nav .nav-link {
+    color: #eee;
+    text-decoration: none;
+    font-size: 1rem;
+    padding-bottom: 3px;
+    transition: color 0.2s, border-bottom 0.2s;
+    white-space: nowrap; /* Allows link text to wrap if needed */
+}
+
+.header-nav .nav-link:hover {
+    color: #f1c40f; /* Highlight color */
+    border-bottom: 2px solid #f1c40f;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Reduced gap for mobile */
+    min-width: 0;
+    justify-content: flex-end;
+    /* On smaller screens, force this element to the top-right corner */
+    width: auto;
+    flex-shrink: 0;
+}
+
+.welcome-message {
+    font-size: 0.85rem; /* Smaller font */
+    display: none; 
+    white-space: nowrap;
+}
+
+.logout-button {
+    padding: 8px 15px;
+    background-color: #ffffff; /* Red logout button */
+    color: #5834db;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    flex-shrink: 0;
+}
+
+.logout-button:hover {
+    background-color: #dcdcdc;
+    color: #5834db;
+}
+
+@media (min-width: 640px) {
+    .admin-header {
+        flex-wrap: nowrap; /* Restore single-row layout */
+        padding: 15px 20px;
+    }
+
+    .header-left {
+        gap: 30px; /* Restore desktop gap */
+    }
+    
+    .header-right {
+        gap: 15px; /* Restore desktop gap */
+    }
+
+    .header-nav .nav-link {
+        font-size: 1rem; /* Restore desktop font size */
+    }
+
+    /* Restore the welcome message display */
+    .welcome-message {
+        display: inline;
+    }
+    
+    .logout-button {
+        padding: 8px 15px; /* Restore desktop padding */
+    }
+}
+
 /* BASE LAYOUT */
 .admin-dashboard-page {
     /* Ensures page fills view and allows the header to remain visible */
     min-height: 100vh; 
     background-color: #ecf0f1; /* Light background for the content area */
+    font-family: 'Times New Roman', Times, serif;
 }
 
 .admin-main-content {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import './SignupPage.css'; // Import the dedicated CSS file
 import LostHubLogo from '../../assets/LostHub_Logo.png';
 
@@ -59,12 +59,13 @@ const SignupPage = () => {
             <div className="signup-form-container">
                 
                 <div className="logohub-icon">
-                    <img 
-                        className="signup-logo-image" 
-                        src={LostHubLogo} 
-                        alt="LostHub Logo" 
-                        
+                    <Link to="/login" className="logo-link-signup">
+                        <img 
+                            className="signup-logo-image" 
+                            src={LostHubLogo} 
+                            alt="LostHub Logo" 
                         />
+                    </Link>
                 </div>
 
                 {/* Header Text */}

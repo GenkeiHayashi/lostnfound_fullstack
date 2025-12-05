@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { LogIn, UserPlus } from 'lucide-react'; // Icons for Login and Sign Up
 import './LandingPage.css'; // Essential: Import the CSS File
+import LostHubLogo from '../../assets/LostHub_Logo.png'; 
 
 const LandingPage = () => {
     // 1. UNIQUE HEADER COMPONENT (Using className)
@@ -13,14 +15,16 @@ const LandingPage = () => {
             </Link>
 
             {/* Right Side: Navigation Buttons */}
-            <div>
+            <div className="header-buttons-container">
                 {/* Login Button uses className */}
                 <Link to="/login" className="header-button header-login-btn">
+                    <LogIn size={18} className="icon-left" />
                     Log In
                 </Link>
                 
                 {/* Sign Up Button (Primary Action) uses className */}
                 <Link to="/signup" className="header-button header-signup-btn">
+                    <UserPlus size={18} className="icon-left" />
                     Sign Up
                 </Link>
             </div>
@@ -29,14 +33,9 @@ const LandingPage = () => {
 
     // 2. UNIQUE FOOTER COMPONENT (Using className)
     const LandingFooter = () => (
-        // Use className instead of style={styles.footer}
         <footer className="landing-footer">
             <p className="footer-copyright">
-                &copy; 2025 LostHub UTM All Rights Reserved.
-                <span className="footer-separator"> | </span> 
-                <Link to="/privacy" className="footer-link">Privacy Policy</Link>
-                <span className="footer-separator"> | </span> 
-                <Link to="/terms" className="footer-link">Terms</Link>
+                &copy; 2025 LostHub HUNTWØ All Rights Reserved.
             </p>
         </footer>
     );
@@ -56,15 +55,25 @@ const LandingPage = () => {
                     {/* Left Section */}
                     <div className="hero-section">
                         <h2 className="welcome-text">Welcome to</h2>
-                        <h1 className="website-name">LostHub</h1>
+                         {/*<h1 className="website-name">LostHub</h1> */}
+                        <div className="logohub-icon">
+                            <img 
+                                className="losthub-logo-img" 
+                                src={LostHubLogo} 
+                                alt="LostHub Logo" 
+                            />
+                        </div>
                     </div>
 
                     {/* Right Section */}
                     <div className="description-section">
+                        <h3 className="description-title">Lost it? We'll help you find what matters.</h3>
                         <p className="description-text">
                             In universities, where thousands of students and staff move around daily, personal items such as student IDs, wallets, electronic devices, and keys are frequently misplaced. 
                             The current process of recovering these items is largely manual, relying on notice boards, social media groups, or word of mouth, which often leads to inefficiency, confusion, and low recovery rates. 
-                            To solve this problem, there is a need for a centralized, AI-powered Lost and Found web that allows users to report lost or found items with descriptions and images. 
+                        </p>
+                        <p className="description-text highlight">
+                            Therefore, LostHub is here for you. it is a centralized, AI-powered Lost and Found web that allows users to report lost or found items with descriptions and images. 
                             This solution would streamline the recovery process, reduce stress, and promote a more connected and responsible campus environment.
                         </p>
                     </div>

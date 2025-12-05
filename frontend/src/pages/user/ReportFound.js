@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios'; 
+import {LogOut} from 'lucide-react';
 import { useAuth } from '../../context/AuthContext'; 
+import PersonIcon from '../../assets/person.png'; 
+import axios from 'axios'; 
 import './ReportFound.css'; 
 
 // Item Categories (Same as used in AllPosts)
@@ -29,18 +31,20 @@ const StandaloneHeader = () => {
             <div className="header-left">
                 {/* Logo click brings user back to AllPosts page */}
                 <Link to="/posts" className="header-logo-link">LostHub</Link>
-            </div>
-
+           </div>
+    
             <div className="header-right">
-                <div className="person-icon-placeholder" 
-                     style={{width: '30px', height: '30px', borderRadius: '50%', backgroundColor: '#eee', border: '1px solid #ccc'}}>
+                <div className="person-badge"> 
+                    <img src={PersonIcon} alt="Person Icon" className="person-icon" />      
+                    <span className="welcome-message">
+                        <strong>{username}</strong>
+                    </span>
                 </div>
-                <span className="welcome-message">
-                    <strong>{username}</strong>
-                </span>
-                
+                    
+                <div className="header-button-container"></div>
                 <a href="/login" onClick={handleLogout} className="logout-button-link">
-                    Logout
+                    <LogOut size={18} className="icon-left" />
+                    Log Out
                 </a>
             </div>
         </header>
@@ -198,13 +202,14 @@ const ReportFound = () => {
                             </select>
 
                             {/* 3. Last Seen Location (Where the item was physically found) */}
-                            <label htmlFor="lastSeenLocation">Last Seen Location</label>
+                            <label htmlFor="lastSeenLocation">Last Seen Location*</label>
                             <input
                                 type="text"
                                 id="lastSeenLocation"
                                 name="lastSeenLocation"
                                 value={formData.lastSeenLocation}
                                 onChange={handleChange}
+                                required
                                 placeholder="Eg: Arked Lestari C2 Mart, FKE Undergraduate Office"
                                 disabled={isLoading}
                                 className="form-input"
@@ -261,7 +266,7 @@ const ReportFound = () => {
                                         />
                                     ) : (
                                         <p className="upload-prompt">
-                                            Click here to upload photo
+                                            Click here to upload photo or similar item photo 
                                         </p>
                                     )}
                                 </div>

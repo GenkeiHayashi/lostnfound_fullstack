@@ -5,7 +5,11 @@
     align-items: center;
     padding: 15px 25px;
     background-color: #5834db; /* Light background for definition */
-    border-bottom: 2px solid #ddd;
+    flex-wrap: wrap; /* CRUCIAL: Allows elements to wrap on small screens */
+    box-sizing: border-box; /* Ensure padding doesn't cause overflow */
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 /* --- Left Section (Logo and Nav) --- */
@@ -13,6 +17,7 @@
     display: flex;
     align-items: center;
     gap: 20px; /* Space between logo and navigation links */
+    min-width: 0;
 }
 
 .header-logo-link {
@@ -20,11 +25,15 @@
     font-weight: bold;
     color: #ffffff;
     text-decoration: none;
+    flex-shrink: 0; /* Keep the logo size fixed */
 }
 
+/* On mobile, navigation should move to its own row if space is tight */
 .header-nav {
     display: flex;
-    gap: 15px; /* Space between Report Lost and Report Found */
+    gap: 10px; /* Reduced gap for mobile */
+    min-width: 0;
+    flex-grow: 1; /* Allows nav links to take available space */
 }
 
 .nav-link {
@@ -32,35 +41,118 @@
     text-decoration: none;
     font-size: 0.95rem;
     transition: color 0.2s;
-}
-
-.nav-link:hover {
-    color: #3498db;
+    /* Allows link text to wrap */
+    white-space: normal; 
+    text-align: center;
+    padding: 2px 4px;
 }
 
 /* --- Right Section (Welcome/Logout) --- */
 .header-right {
     display: flex;
     align-items: center;
-    gap: 15px; /* Space between Welcome message and Logout button */
+    gap: 10px; /* Space between Welcome message and Logout button */
+    flex-grow: 1;
+    justify-content: flex-end; /* Keeps content pushed right */
+    min-width: 0;
+    gap: 8px; /* Space between buttons */
+    /* Allows content to wrap to the next line if the screen is too narrow */
+    flex-wrap: wrap; 
+}
+
+.header-button {
+    text-decoration: none; /* Removed underscore/underline */
+    font-weight: 600;
+    font-size: 1.0rem;
+    cursor: pointer;
+    /* Ensure text and icon are aligned */
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
+}
+
+.icon-left {
+    /* Ensures the icon stays sized correctly */
+    flex-shrink: 0;
 }
 
 .welcome-message {
     color: #fffefe;
     font-size: 0.95rem;
+    display: none; /* Hidden by default on mobile */
+    white-space: nowrap;
 }
 
 .logout-button-link {
-    padding: 6px 12px;
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.5rem 0.75rem;
     background-color: #ffffff;
     color: #5834db;
     border: none;
-    border-radius: 4px;
+    border-radius: 0.375rem;
     cursor: pointer;
-    font-size: 0.9rem;
-    text-decoration: none; /* Crucial: Remove the underline from the link */
-    font-weight: bold;
-    display: inline-block; /* Allows padding/sizing link like a button */
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+    text-decoration: none;
+    font-weight: 500;
+    /* Ensure the text is visible, but icon alignment is preserved */
+    flex-shrink: 0; 
+}
+.logout-button:hover {
+    background-color: #f3ebeb;
+}
+/* Hide the "Log Out" text on the smallest screens, show only the icon */
+.logout-button-link span {
+    display: none;
+}
+
+/* --- DESKTOP OVERRIDE: Restore 1-Row Layout (> 640px) --- */
+@media (min-width: 640px) {
+    .main-header {
+        /* Unset wrap to force content back into one row */
+        flex-wrap: nowrap;
+        padding: 15px 20px;
+    }
+
+    .header-left {
+        /* Revert gap */
+        gap: 30px; 
+    }
+
+    .header-right {
+        /* Revert gap */
+        gap: 15px; 
+        flex-grow: 0;
+    }
+
+    /* Restore the welcome message */
+    .welcome-message {
+        display: inline-block;
+    }
+    
+    /* Restore the navigation links to full text/size */
+    .header-nav {
+        gap: 15px;
+        flex-grow: 0;
+    }
+
+    .nav-link {
+        font-size: 0.95rem;
+        white-space: nowrap;
+        padding: 0;
+    }
+
+    /* Restore the 'Log Out' text */
+    .logout-button-link span {
+        display: inline;
+    }
+}
+
+.logout-button:hover {
+    background-color: #ab9d9d;
 }
 
 /* --- Control Bar and Filters --- */
@@ -85,6 +177,7 @@
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 1rem;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 .status-toggle-group {
@@ -101,12 +194,15 @@
     cursor: pointer;
     transition: background-color 0.2s, color 0.2s;
     flex-grow: 1; /* Makes buttons share space evenly on mobile */
+    font-family: 'Times New Roman', Times, serif;
+    min-width: 80px; /* Minimum size to prevent excessive squishing */
 }
 
 .status-button.active-status {
     background-color: #3498db; /* Shaded background */
     color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family:'Times New Roman', Times, serif
 }
 
 /* --- Item Grid Layout --- */

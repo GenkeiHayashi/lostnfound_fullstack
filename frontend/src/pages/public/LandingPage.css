@@ -9,6 +9,7 @@
 .main-content {
     flex-grow: 1;           /* CRUCIAL: Forces main content to consume all remaining space */
     padding: 20px 0;
+    background-color: #ffffff;
 }
 
 /* 2. HEADER STYLES */
@@ -18,7 +19,8 @@
     align-items: center;
     padding: 15px 20px;
     background-color: #5834db;
-    /*border-bottom: 1px solid #dddddd;*/
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .landing-logo {
@@ -29,23 +31,58 @@
     font-style: bold;
 }
 
+.header-buttons-container {
+    display: flex;
+    gap: 8px; /* Space between buttons */
+    /* Allows content to wrap to the next line if the screen is too narrow */
+    flex-wrap: wrap; 
+    justify-content: flex-end; 
+}
+
 .header-button {
-    margin-left: 10px;
-    padding: 1px 15px;
-    text-decoration: text;
+    text-decoration: none; /* Removed underscore/underline */
     font-weight: 600;
     font-size: 1.0rem;
     cursor: pointer;
+    /* Ensure text and icon are aligned */
+    display: flex;
+    align-items: center;
+    gap: 6px; /* Space between icon and text */
+}
+
+.icon-left {
+    /* Ensures the icon stays sized correctly */
+    flex-shrink: 0;
 }
 
 .header-login-btn {
-    color: white;
-    background-color: transparent;
+    color: #5834db;
+    background-color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 520;
+    transition: background-color 0.3s;
+    padding: 0.5rem 0.75rem;
+}
+
+.header-login-btn:hover {
+    background-color: #f0f0f0;
 }
 
 .header-signup-btn {
-    background-color: #5834db;
-    color: white;
+   color: white; 
+    background-color: #3f1e91; 
+    border: none;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    padding: 0.5rem 0.75rem;
+}
+
+.header-signup-btn:hover {
+    background-color: #24036c;
 }
 
 /* 3. CONTENT GRID (MOBILE-FIRST LAYOUT) */
@@ -56,6 +93,14 @@
     padding: 20px;
     max-width: 1200px;
     margin: 50px auto 20px auto; 
+    background-color: white; /* White panel for the content */
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    transition: box-shadow 0.3s;
+}
+
+.landing-grid:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* Interactive hover effect */
 }
 
 .hero-section {
@@ -64,10 +109,11 @@
 }
 
 .welcome-text {
-    font-size: 2rem;
+    font-size: 3rem;
     color: #34495e;
     font-weight: 300;
     margin: 0;
+    text-align: center;
 }
 
 .website-name {
@@ -75,6 +121,49 @@
     color: #5834db;
     font-weight: 800;
     margin: 0;
+    text-align: center;
+}
+
+/* Link Wrapper for the main logo */
+.logo-link-main {
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.logo-link-main:hover {
+    transform: scale(1.05); /* Interactive scale effect on hover */
+}
+
+/* CUSTOM LOGO ICON STYLES */
+.logohub-icon {
+    /* Represents the centered space for the icon */
+    display: flex;
+    justify-content: center;
+    margin-bottom: auto;
+}
+
+/* New style for the logo image */
+.losthub-logo-img {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto; /* Center the logo with margin on top */
+
+}
+
+.description-section {
+    padding-top: 20px;
+    border-top: 1px solid #eee; /* Separator on mobile */
+}
+
+.description-title {
+    font-size: 1.5rem;
+    color: #0300a9;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 15px;
 }
 
 .description-text {
@@ -83,13 +172,23 @@
     color: #34495e;
 }
 
+/* Style to highlight the mission statement */
+.description-text.highlight {
+    background-color: #e6e6fa; /* Light lavender background */
+    padding: 15px;
+    border-left: 5px solid #5834db;
+    border-radius: 4px;
+    font-style: italic;
+    color: #1f2937;
+}
+
 /* --- DESKTOP OVERRIDE: Switch to two columns --- */
 @media (min-width: 768px) {
     .landing-grid {
         flex-direction: row; /* Switch to horizontal layout */
         justify-content: space-between;
         align-items: flex-start;
-        padding: 40px 20px;
+        padding: 40px ;
     }
     
     .hero-section {
@@ -98,10 +197,16 @@
         margin-bottom: 0;
     }
     
+    .losthub-logo-img {
+        width: 100%; /* Scale up logo on desktop */
+    }
+
     .description-section {
         flex-basis: 60%; /* Right section width */
         padding-left: 40px;
         border-left: 1px solid #eee;
+        border-top: none; /* Remove mobile separator */
+        padding-top: 0;
     }
 }
 
@@ -117,15 +222,4 @@
 .footer-copyright {
     margin: 5px 0;
     font-size: 0.9rem;
-}
-
-.footer-link {
-    color: #fff; /* White links */
-    text-decoration: none;
-    margin: 0 10px;
-    font-size: 0.9rem;
-}
-
-.footer-separator {
-    color: #fff;
 }

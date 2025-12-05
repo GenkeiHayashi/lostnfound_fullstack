@@ -105,6 +105,7 @@
 .action-buttons-group {
     display: flex;
     gap: 15px;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 .btn {
@@ -120,16 +121,19 @@
 .btn-approve {
     background-color: #2ecc71; /* Green */
     color: white;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 .btn-reject, .btn-delete {
     background-color: #e74c3c; /* Red */
     color: white;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 .btn-back {
     background-color: #95a5a6; /* Gray */
     color: white;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 /* 5. CONFIRMATION/SUCCESS MODALS */
@@ -154,16 +158,19 @@
 .btn-confirm-approve, .btn-confirm-ok {
     background-color: #2ecc71;
     color: white;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 .btn-confirm-reject, .btn-confirm-delete {
     background-color: #e74c3c;
     color: white;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 .btn-cancel {
     background-color: #ccc;
     color: #333;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 /* 6. FULL-SCREEN IMAGE VIEWER */
