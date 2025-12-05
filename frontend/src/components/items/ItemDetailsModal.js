@@ -49,7 +49,7 @@ const ItemDetailsModal = ({ item, onClose }) => {
         locationDetailComponent = (
             <>
                 <p><strong>Last Seen Location:</strong> {item.lastSeenLocation || 'N/A'}</p>
-                <p><strong>Item Collect Location:</strong> {item.whereToCollect || 'N/A'}</p>
+                <p><strong>Item Collect Location:</strong> {item.itemCollectLocation || 'N/A'}</p>
                 <p><strong>Description:</strong> {item.description || 'N/A'}</p>
             </>
         );
@@ -73,7 +73,7 @@ const ItemDetailsModal = ({ item, onClose }) => {
                             className="modal-item-image"
                             onClick={() => setShowFullImage(true)}
                         />
-                        <span className="image-label">Image Preview (imageUrl from firebase)</span>
+                        <span className="image-label">Click image for full view</span>
                     </div>
 
                     {/* Right Side: Details */}

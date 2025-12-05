@@ -274,7 +274,7 @@ const cosineSimilarity = (vecA, vecB) => {
  * @returns {object[]} Array of found item matches that exceed the similarity threshold.
  */
 const getPotentialMatches = async (queryVector, targetStatus) => {
-    const SIMILARITY_THRESHOLD = 0.8; // Use the same threshold as Route 4
+    const SIMILARITY_THRESHOLD = 0.6; // Use the same threshold as Route 4
     const MAX_MATCHES = 5;
 
     // 1. Fetch all eligible target items (opposite status, approved, unresolved)

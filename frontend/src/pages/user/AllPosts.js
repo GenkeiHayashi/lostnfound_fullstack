@@ -176,7 +176,7 @@ const AllPosts = () => {
 
                 {/* Item Grid */}
                 {isLoading ? (
-                    <div className="loading-state">Loading Items...</div>
+                    <div className="loading-state">Loading items...</div>
                 ) : (
                     <div className="item-grid-container">
                         {items.length > 0 ? (

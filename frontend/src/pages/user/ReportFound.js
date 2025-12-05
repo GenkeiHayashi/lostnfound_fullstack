@@ -78,7 +78,6 @@ const ReportFound = () => {
 
     const handleImageChange = (e) => {
         if (e.target.files && e.target.files[0]) {
-            // FIX: Set file and create a temporary URL for preview
             setItemImage(e.target.files[0]);
         }
     };

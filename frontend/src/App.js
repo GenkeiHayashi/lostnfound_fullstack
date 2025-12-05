@@ -24,13 +24,12 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/forgot-password" element={<h1>Forgot Password Page Placeholder</h1>} />
         
         {/* ======================= 2. AUTHENTICATED ROUTES (User or Admin) ======================= */}
-        {/* These routes require the user to be logged in (role: 'user' OR 'admin') */}
+        {/* These routes require the user to be logged in (role: 'user') */}
         <Route element={<ProtectedRoute allowedRoles={['user']} />}>
         
-        {/* User Routes (Previously Protected) */}
+        {/* User Routes */}
         <Route path="/posts" element={<AllPosts />} />
         <Route path="/report/lost" element={<ReportLost />} />
         <Route path="/report/found" element={<ReportFound />} />
@@ -40,7 +39,7 @@ function App() {
         {/* These routes require the highest level of authorization (role: 'admin') */}
         <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
 
-        {/* Admin Routes (Previously Protected) */}
+        {/* Admin Routes */}
         <Route path="/admin" element={<AdminDashboard />} /> 
         <Route path="/admin/usermanage" element={<UserManagement />} />
         
