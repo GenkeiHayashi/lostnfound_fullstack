@@ -93,7 +93,7 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json()); // Essential for handling JSON data
-app.use(cors());         // Essential for frontend communication
+app.use(cors({ origin: 'https://lostnfound-git-vercel-deploy-genkeihayashis-projects.vercel.app'}));         // Essential for frontend communication
 
 
 // --- AUTHENTICATION ---
