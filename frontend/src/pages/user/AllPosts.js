@@ -37,7 +37,7 @@ const formatTimestamp = (timestamp) => {
 const CATEGORIES = ['Electronics', 'Stationery', 'Books', 'Clothing', 'Personal Items', 'Others'];
 
 // 🛑 BACKEND PLACEHOLDER: API URL
-const ITEMS_API_URL = 'https://losthub-backend-git-vercel-deploy-genkeihayashis-projects.vercel.app/api/items';
+const ITEMS_API_URL = 'https://losthub-backend.vercel.app/api/items';
 
 // --- STATIC HEADER PLACEHOLDER with BACKEND LOGIC---
 const StaticHeader = () => {

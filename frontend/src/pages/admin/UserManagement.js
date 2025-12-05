@@ -7,8 +7,8 @@ import PersonDownIcon from '../../assets/persondown.png'; // Assuming you save t
 import axios from 'axios'; // Import Axios for API calls
 import { useAuth } from '../../context/AuthContext'; // To access token and current user info
 
-const USERS_SEARCH_API_URL = 'https://losthub-backend-git-vercel-deploy-genkeihayashis-projects.vercel.app/api/admin/users/search'; 
-const SET_ROLE_API_URL = 'https://losthub-backend-git-vercel-deploy-genkeihayashis-projects.vercel.app/api/admin/set-role'; 
+const USERS_SEARCH_API_URL = 'https://losthub-backend.vercel.app/api/admin/users/search'; 
+const SET_ROLE_API_URL = 'https://losthub-backend.vercel.app/api/admin/set-role'; 
 
 // Custom hook for debouncing the search input
 const useDebounce = (value, delay) => {

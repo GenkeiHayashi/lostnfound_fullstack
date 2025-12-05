@@ -5,7 +5,7 @@ import './SignupPage.css'; // Import the dedicated CSS file
 import LostHubLogo from '../../assets/LostHub_Logo.png';
 
 // Backend URL where your Express server is running
-const API_URL = 'https://losthub-backend-git-vercel-deploy-genkeihayashis-projects.vercel.app/api/auth/register'; 
+const API_URL = 'https://losthub-backend.vercel.app/api/auth/register'; 
 
 const SignupPage = () => {
     // State to manage form inputs

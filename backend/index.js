@@ -90,10 +90,17 @@ const upload = multer({
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
+const allowedOrigins = [
+    'http://localhost:3000', // For local testing
+    'https://lostnfound-phi.vercel.app', // Your production frontend URL
+    // Add your preview/branch deployment domain here
+];
 // Middleware
 app.use(express.json()); // Essential for handling JSON data
-app.use(cors({ origin: 'https://lostnfound-git-vercel-deploy-genkeihayashis-projects.vercel.app'}));         // Essential for frontend communication
+app.use(cors({
+    origin: allowedOrigins,
+    credentials: true // Crucial if passing cookies or authorization headers
+}));         // Essential for frontend communication
 
 
 // --- AUTHENTICATION ---

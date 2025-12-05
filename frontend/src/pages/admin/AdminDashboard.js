@@ -9,9 +9,9 @@ import './AdminDashboard.css';
 // --- UTILITIES & MOCK DATA (Same as AllPosts) ---
 const CATEGORIES = ['Electronics', 'Stationery', 'Books', 'Clothing', 'Personal Items', 'Others'];
 // 🛑 BACKEND PLACEHOLDER: API URLS
-const ITEMS_API_URL = 'https://losthub-backend-git-vercel-deploy-genkeihayashis-projects.vercel.app/api/items'; 
-const APPROVE_API_URL = 'https://losthub-backend-git-vercel-deploy-genkeihayashis-projects.vercel.app/api/admin/approve-item'; 
-const DELETE_API_URL = 'https://losthub-backend-git-vercel-deploy-genkeihayashis-projects.vercel.app/api/admin/items'; 
+const ITEMS_API_URL = 'https://losthub-backend.vercel.app/api/items'; 
+const APPROVE_API_URL = 'https://losthub-backend.vercel.app/api/admin/approve-item'; 
+const DELETE_API_URL = 'https://losthub-backend.vercel.app/api/admin/items'; 
 
 // Utility function to format timestamp from Firestore
 const formatTimestamp = (timestamp) => {
