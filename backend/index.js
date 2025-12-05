@@ -16,26 +16,40 @@ dotenv.config();
 // --- FIREBASE INITIALIZATION ---
 
 // Helper function to get the current file directory in ES Modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+//const __filename = fileURLToPath(import.meta.url);
+//const __dirname = path.dirname(__filename);
 
 // Get paths and project ID from environment variables
-const serviceAccountPath = process.env.FIREBASE_PRIVATE_KEY_PATH;
-const projectId = process.env.FIREBASE_PROJECT_ID;
+//const serviceAccountPath = process.env.FIREBASE_PRIVATE_KEY_PATH;
+// 1. Get and process the private key from environment variables
+// IMPORTANT: Replace '\\n' with actual newline characters '\n'
+const privateKey = process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n');
 
-if (!serviceAccountPath || !projectId) {
+// 2. Construct the in-memory Service Account Credentials Object
+const serviceAccountConfig = {
+    type: process.env.FIREBASE_TYPE || 'service_account',
+    project_id: process.env.FIREBASE_PROJECT_ID,
+    private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
+    private_key: privateKey, 
+    client_email: process.env.FIREBASE_CLIENT_EMAIL,
+    client_id: process.env.FIREBASE_CLIENT_ID,
+    // Add other fields if necessary, but the above are the core required fields.
+};
+
+if (!serviceAccountConfig.project_id || !privateKey) {
     console.error("❌ FATAL: Missing Firebase environment variables. Check .env file.");
     process.exit(1);
 }
 
-// Resolve the absolute path to the JSON key file
+/*// Resolve the absolute path to the JSON key file
 const absolutePath = path.resolve(__dirname, serviceAccountPath); 
 console.log(`DEBUG PATH: Resolved Service Account Key Path: ${absolutePath}`);
+*/
 try {
     // Initialize Firebase Admin SDK
     admin.initializeApp({
-        credential: admin.credential.cert(absolutePath), 
-        databaseURL: `https://${projectId}.firebaseio.com` 
+        credential: admin.credential.cert(serviceAccountConfig), 
+        databaseURL: `https://${serviceAccountConfig.project_id}.firebaseio.com` 
     });
 
     console.log("✅ SUCCESS: Firebase Admin SDK initialized and connected.");
@@ -48,16 +62,17 @@ try {
 export const db = admin.firestore();
 export const auth = admin.auth();
 
+const projectId = serviceAccountConfig.project_id;
 
 // --- GOOGLE CLOUD STORAGE SETUP ---
 // Initialize Google Cloud Storage using the same credentials from Firebase Admin SDK
 const storage = new Storage({
-    projectId: projectId,
-    keyFilename: absolutePath, // Re-use the service account key path
+    projectId: serviceAccountConfig.project_id,
+    credentials: serviceAccountConfig, // Re-use the service account key path
 });
 
-// Define the bucket name (usually projectId.appspot.com)
-const bucketName = `${projectId}.firebasestorage.app`;
+// Define the bucket name
+const bucketName = `${serviceAccountConfig.project_id}.firebasestorage.app`;
 const bucket = storage.bucket(bucketName);
 
 
@@ -109,7 +124,7 @@ const verifyToken = async (req, res, next) => {
 };
 
 const authClient = new GoogleAuth({ 
-    keyFile: absolutePath, // <--- 1. Tells it WHICH file to use
+    credentials: serviceAccountConfig, // <--- 1. Tells it WHICH file to use
     scopes: ['https://www.googleapis.com/auth/cloud-platform'], // <--- 2. Tells it WHAT permissions to ask for
 });
 
