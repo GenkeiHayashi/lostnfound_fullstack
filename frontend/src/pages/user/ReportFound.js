@@ -8,7 +8,7 @@ import './ReportFound.css';
 const CATEGORIES = ['Electronics', 'Stationery', 'Books', 'Clothing', 'Personal Items', 'Others'];
 
 // --- API CONFIGURATION ---
-const ITEMS_API_URL = 'https://losthub-backend.vercel.app/items'; 
+const ITEMS_API_URL = 'https://losthub-backend.vercel.app/api/items'; 
 
 // --- DYNAMIC HEADER COMPONENT ---
 const StandaloneHeader = () => {
