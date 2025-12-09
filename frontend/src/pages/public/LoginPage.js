@@ -115,11 +115,7 @@ const LoginPage = () => {
                     <p className="signup-link-text">
                         Not yet have an account? <Link to="/signup" className="link-style">Sign Up</Link>
                     </p>
-                    
-                    {/* Right: Forgot Password Link */}
-                    <Link to="/forgot-password" className="link-style forgot-password-link">
-                        Forgot Password?
-                    </Link>
+
                 </div>
 
             </div>

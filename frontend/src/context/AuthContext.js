@@ -8,7 +8,7 @@ const AuthContext = createContext(null);
 // Update API_URL to use HTTPS and the correct path for login.
 // Replace 'yourdomain.com' with your actual domain name once deployed. 
 // For local development, use http://localhost:3000
-const API_URL = 'http://localhost:3000/api/auth'; 
+const API_URL = 'https://losthub-backend.vercel.app/api/auth'; 
 const LOGIN_API_URL = `${API_URL}/login`; // Will be the POST endpoint
 
 export const AuthProvider = ({ children }) => {
@@ -40,13 +40,6 @@ export const AuthProvider = ({ children }) => {
         })
         .finally(() => setIsLoading(false));
       
-      /* // CHANGE 3: DELETE/COMMENT OUT the testing simulation logic
-      // *** TESTING SIMULATION LOGIC: KEEP FOR NOW ***
-      setUser({ name: 'Reloaded User', role: storedRole });
-      setRole(storedRole);
-      setIsAuthenticated(true);
-      // *** END TESTING SIMULATION LOGIC ***
-      */
     } else {
         // Only call this if no token was found
         setIsLoading(false); 
@@ -110,7 +103,7 @@ export const AuthProvider = ({ children }) => {
 
   // If the initial check is running, display a loading screen
   if (isLoading) {
-    return <h1>Please wait a moment... :D</h1>; 
+    return <h1>Hang tight! Good things are worth the wait. Don't lose hope!</h1>; 
   }
 
 

@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Search, LogOut, X } from 'lucide-react'; // Only keeping used Lucide icons
 import './UserManagement.css'; // Importing the CSS file
-import PersonIcon from '../../assets/person.png'; // Assuming you save the image here
-import PersonUpIcon from '../../assets/personup.png'; // Assuming you save the image here
-import PersonDownIcon from '../../assets/persondown.png'; // Assuming you save the image here
+import PersonIcon from '../../assets/person.png'; 
+import PersonUpIcon from '../../assets/personup.png'; 
+import PersonDownIcon from '../../assets/persondown.png'; 
 import axios from 'axios'; // Import Axios for API calls
 import { useAuth } from '../../context/AuthContext'; // To access token and current user info
 
-const USERS_SEARCH_API_URL = 'http://localhost:3000/api/admin/users/search'; 
-const SET_ROLE_API_URL = 'http://localhost:3000/api/admin/set-role'; 
+const USERS_SEARCH_API_URL = 'https://losthub-backend.vercel.app/api/admin/users/search'; 
+const SET_ROLE_API_URL = 'https://losthub-backend.vercel.app/api/admin/set-role'; 
 
 // Custom hook for debouncing the search input
 const useDebounce = (value, delay) => {

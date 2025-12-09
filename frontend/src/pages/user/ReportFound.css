@@ -44,8 +44,20 @@
     background-color: #5834db;
     border-bottom: 2px solid #ddd;
 }
-/* Define all other header classes (.header-left, .header-nav, .logout-button, etc.) 
-   using the styles from AllPosts.css here. */
+
+.person-badge {
+    display: flex;
+    align-items: center;
+}
+
+.person-icon {
+    width: 20px; 
+    height: 20px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+}
 
 /* FORM LAYOUT (MOBILE-FIRST: STACKED COLUMNS) */
 .report-form {
@@ -129,7 +141,7 @@ label {
 }
 
 .upload-prompt {
-    color: #000000;
+    color: #878787;
     margin: 0;
 }
 
@@ -274,5 +286,11 @@ label {
     font-size: 0.9rem;
     text-decoration: none;
     font-weight: bold;
+    display: inline-block;
+}
+
+.icon-left {
+    /* Ensures the icon stays sized correctly */
+    flex-shrink: 0;
     display: inline-block;
 }

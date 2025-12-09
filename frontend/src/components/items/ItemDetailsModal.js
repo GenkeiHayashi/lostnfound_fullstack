@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import './ItemDetailsModal.css'; 
 
 // Utility function to format timestamp (copied here for standalone testing)
@@ -29,6 +29,8 @@ const formatTimestamp = (timestamp) => {
 
 
 const ItemDetailsModal = ({ item, onClose }) => {
+    const [showFullImage, setShowFullImage] = useState(false);
+
     if (!item) return null;
 
     // --- Dynamic Location Field Logic ---
@@ -47,7 +49,7 @@ const ItemDetailsModal = ({ item, onClose }) => {
         locationDetailComponent = (
             <>
                 <p><strong>Last Seen Location:</strong> {item.lastSeenLocation || 'N/A'}</p>
-                <p><strong>Item Collect Location:</strong> {item.whereToCollect || 'N/A'}</p>
+                <p><strong>Item Collect Location:</strong> {item.itemCollectLocation || 'N/A'}</p>
                 <p><strong>Description:</strong> {item.description || 'N/A'}</p>
             </>
         );
@@ -69,8 +71,9 @@ const ItemDetailsModal = ({ item, onClose }) => {
                             src={item.imageUrl || 'https://via.placeholder.com/300x200?Text=No+Image'} 
                             alt={item.name} 
                             className="modal-item-image"
+                            onClick={() => setShowFullImage(true)}
                         />
-                        <span className="image-label">Image Preview (imageUrl from firebase)</span>
+                        <span className="image-label">Click image for full view</span>
                     </div>
 
                     {/* Right Side: Details */}
@@ -89,6 +92,15 @@ const ItemDetailsModal = ({ item, onClose }) => {
                     <button onClick={onClose} className="back-button">Back</button>
                 </div>
             </div>
+
+             {/* Full Screen Image Viewer Modal */}
+            {showFullImage && (
+                <div className="modal-overlay modal-full-image" onClick={() => setShowFullImage(false)}>
+                    <img src={item.imageUrl} alt={item.name} className="full-image-viewer" />
+                    <button onClick={() => setShowFullImage(false)} className="full-image-close">X</button>
+                </div>
+            )}
+            
         </div>
     );
 };

@@ -1,70 +1,74 @@
-# Getting Started with Create React App
+# 📖 Lost & Found Campus System (AI-Powered)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository contains the full-stack code for the university's centralized, AI-powered Lost & Found web application.
 
-## Available Scripts
+## Project Overview
 
-In the project directory, you can run:
+This system streamlines item recovery on campus by replacing manual processes with a secure, intelligent, and centralized web platform.
 
-### `npm start`
+* **Solution Core:** A full-stack application leveraging client-side presentation and a secure, cloud-based API.
+* **Key Feature:** **AI-Powered Semantic Matching** - Uses advanced text embeddings to compare item descriptions based on meaning rather than just keywords, significantly improving match rates.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Technology Stack
 
-### `npm test`
+| Component | Technology | Purpose |
+| Frontend | React | User Interface for reporting, viewing, and searching items. |
+| Backend | Node.js, Express.js | Core REST API framework (Vercel Serverless Functions). |
+| Database | Google Cloud Firestore | NoSQL database for item records and user profiles. |
+| Authentication | Firebase Authentication | User identity management and token verification. |
+| AI/Matching | Google Cloud Vertex AI | Generates text vector embeddings (`text-embedding-004`). |
+| Storage | Google Cloud Storage (GCS) | Secure, public hosting for all user-uploaded item images. |
+| Deployment | Vercel | Hosting environment for the separate API project. |
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Setup and Installation (LocalRun)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 1. Prerequisites
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* Node.js (v18+) and npm
+* A configured **Firebase Project** with required services (Firestore, Auth, GCS, Vertex AI).
+* A **Service Account Key** with necessary permissions.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 2. Environment Variables (Local Run)
 
-### `npm run eject`
+Create a file named `.env` in the root directory and populate it with your configuration details. **The `FIREBASE_PRIVATE_KEY` must be a single line with escaped newlines (`\n`)**.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+# --- FIREBASE / GCP CONFIGURATION ---
+FIREBASE_PROJECT_ID="your-project-id"
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\nYOUR_KEY_CONTENT_HERE\\n-----END PRIVATE KEY-----\\n"
+FIREBASE_CLIENT_EMAIL="your-client-email@your-project-id.iam.gserviceaccount.com"
+FIREBASE_WEB_API_KEY="your-project-web-api-key"
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# --- EMAIL CONFIGURATION (Nodemailer) ---
+EMAIL_USER="your-alert-email@gmail.com"
+EMAIL_PASS="your-gmail-app-password"
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 3. Running Locally
+You must run two processes. The frontend must be configured to fetch data from the backend's local port (http://localhost:3000).
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. Start the Backend API
+This starts the Express server which handles all data and AI processing.
 
-## Learn More
+# Terminal 1: Install dependencies and start the backend
+cd backend
+npm install
+npm start
+Backend Status: The API server will be running on http://localhost:3000.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2. Start the Frontend
+Open a new terminal window and run the client application.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Terminal 2: Install dependencies (if not done) and start the frontend
+cd frontend
+npm install 
+npm start
+Frontend Status: The client application will start, typically on a separate port (http://localhost:3001), and will direct all API requests to the backend at http://localhost:3000.
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Vercel Deployment (Dual Project)
+Frontend	User Interface (Client)	        https://lostnfound-phi.vercel.app
+Backend	    Core Server Logic (Server)	    https://losthub-backend.vercel.app

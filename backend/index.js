@@ -90,10 +90,17 @@ const upload = multer({
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
+const allowedOrigins = [
+    'http://localhost:3000', // For local testing
+    'https://lostnfound-phi.vercel.app', // Your production frontend URL
+    // Add your preview/branch deployment domain here
+];
 // Middleware
 app.use(express.json()); // Essential for handling JSON data
-app.use(cors());         // Essential for frontend communication
+app.use(cors({
+    origin: allowedOrigins,
+    credentials: true // Crucial if passing cookies or authorization headers
+}));         // Essential for frontend communication
 
 
 // --- AUTHENTICATION ---
@@ -267,7 +274,7 @@ const cosineSimilarity = (vecA, vecB) => {
  * @returns {object[]} Array of found item matches that exceed the similarity threshold.
  */
 const getPotentialMatches = async (queryVector, targetStatus) => {
-    const SIMILARITY_THRESHOLD = 0.8; // Use the same threshold as Route 4
+    const SIMILARITY_THRESHOLD = 0.6; // Use the same threshold as Route 4
     const MAX_MATCHES = 5;
 
     // 1. Fetch all eligible target items (opposite status, approved, unresolved)
@@ -945,3 +952,4 @@ app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
     console.log(`Backend is serving on port ${PORT}`);
 });
+export default app;

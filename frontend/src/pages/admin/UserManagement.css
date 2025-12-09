@@ -1,6 +1,4 @@
-/* -------------------------------------------------------- */
 /* BASE STYLES: Applying Times New Roman globally as requested */
-/* -------------------------------------------------------- */
 body, .user-management-page {
     font-family: 'Times New Roman', serif;
     margin: 0;
@@ -9,12 +7,10 @@ body, .user-management-page {
 
 .user-management-page {
     min-height: 100vh;
-    background-color: #f4f7f6; /* Light gray background */
+    background-color: #ffffff;
 }
 
-/* -------------------------------------------------------- */
 /* HEADER STYLES */
-/* -------------------------------------------------------- */
 .app-header {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     background-color: #5834db;
@@ -101,9 +97,7 @@ body, .user-management-page {
     }
 }
 
-/* -------------------------------------------------------- */
 /* MAIN CONTENT & SEARCH BAR */
-/* -------------------------------------------------------- */
 .main-content {
     max-width: 1280px;
     margin: 0 auto;
@@ -150,9 +144,7 @@ body, .user-management-page {
     padding: 0 1rem;
 }
 
-/* -------------------------------------------------------- */
 /* TABLE STYLES & SCROLLING */
-/* -------------------------------------------------------- */
 .table-wrapper {
     margin-top: 2rem;
 }
@@ -310,9 +302,7 @@ body, .user-management-page {
     cursor: not-allowed;
 }
 
-/* -------------------------------------------------------- */
 /* MODAL STYLES */
-/* -------------------------------------------------------- */
 .modal-overlay {
     position: fixed;
     inset: 0;
